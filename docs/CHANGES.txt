@@ -1,0 +1,39 @@
+CHANGELOG
+
+2013-07-01 by alderaan
+Serve Google Charts API images over HTTPS
+
+2013-07-01 by Ajax
+Moved autocomplete logic to jquery plugin, introduced artist autocompletes on rest of site
+
+2013-06-30 by Ajax
+Give custom ordering to stickied threads
+
+2013-06-24 by Ajax
+Added user recents to API. ajax.php?action=user_recents&userid=<ID>&limit=<LIMIT> the limit defaults to 15 if empty and maxes out at 50
+
+2013-06-23 by alderaan
+The "Torrent options" section when editing user profiles now follows Microsoft's UI design guidelines, which has been adopted as something we will try to follow in the future. For an overview of what this generally entails, refer to this example document:
+http://msdn.microsoft.com/en-us/library/windows/desktop/aa511452.aspx
+
+2013-06-19 by alderaan
+UI revisions on the artist and torrent group edit pages, with the most significant changes occurring in the artist aliases section%
+
+2013-06-16 by porkpie
+Require a click and an ajax call to view some of the stats on profile pages
+
+2013-06-15 by Ajax
+Adding &artistreleases=1 to artist api url will display only releases by the current artist
+
+2013-06-15 by Ajax
+Added artist and extended artist information to torrent groups in artist json output
+
+2013-06-14 by eth
+Adds option to load news posts using ajax
+
+2013-06-14 by Ajax
+Show number of subscribers and last updated in collage stats
+
+2013-06-14 by Ajax
+Hello Change Log
+
