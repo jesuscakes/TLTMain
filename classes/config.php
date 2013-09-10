@@ -90,7 +90,6 @@ define('DESIGNER',	    '13');
 define('CODER',		    '14');
 define('SYSOP',		    '15');
 define('SUPPORT',	    '20');
-define('DONOR',		    '21');
 
 // Pagination
 define('TORRENT_COMMENTS_PER_PAGE', 10);
