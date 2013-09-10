@@ -63,6 +63,7 @@ if (PHP_VERSION_ID < 50307) {
 } else {
 	define('CRYPT_HASH_PREFIX', '$2y$07$');
 }
+
 define('DEBUG_MODE', false); //Set to false if you dont want everyone to see debug information, can be overriden with 'site_debug'
 define('OPEN_REGISTRATION', true); //Set to false to disable open regirstration, true to allow anyone to register
 define('USER_LIMIT', 5000); //The maximum number of users the site can have, 0 for no limit
