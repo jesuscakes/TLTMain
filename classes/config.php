@@ -73,24 +73,23 @@ define('DONOR_INVITES', 2);
 
 // User class IDs needed for automatic promotions. Found in the 'permissions' table
 // Name of class	Class ID (NOT level)
-define('ADMIN',		'1');
-define('USER',		'2');
-define('MEMBER',	'3');
-define('POWER',		'4');
-define('ELITE',		'5');
-define('VIP',		'6');
-define('TORRENT_MASTER','7');
-define('LEGEND',	'8');
-define('CELEB',		'9');
-define('MOD',		'11');
-define('DESIGNER',	'13');
-define('CODER',		'14');
-define('SYSOP',		'15');
-define('ARTIST',	'19');
-define('DONOR',		'20');
-define('FLS_TEAM',	'21');
-define('POWER_TM',	'22');
-define('ELITE_TM',	'23');
+define('ADMIN',		    '1');
+define('USER',		    '2');
+define('MEMBER',	    '3');
+define('POWER',		    '4');
+define('SUPER',		    '5');
+define('ELITE',		    '6');
+define('GURU',		    '7');
+define('MASTER',	    '8');
+define('VIP',		    '9');   // Ex FLS and respected members at other trackers
+define('LEGEND',            '10');  // Ex TLT staff
+define('TORRENT_CELEBRITY', '11');  // Respected uploaders
+define('MOD',		    '12');
+define('DESIGNER',	    '13');
+define('CODER',		    '14');
+define('SYSOP',		    '15');
+define('SUPPORT',	    '20');
+define('DONOR',		    '21');
 
 // Pagination
 define('TORRENT_COMMENTS_PER_PAGE', 10);
@@ -127,7 +126,6 @@ define('LAB_CHAN', '#');
 define('STATUS_CHAN', '#');
 
 // Miscellaneous values
-
 $ForumsRevealVoters = array();
 $ForumsDoublePost = array();
 
