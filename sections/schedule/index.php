@@ -223,8 +223,11 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 	$Criteria = array();
 	$Criteria[] = array('From'=>USER, 'To'=>MEMBER,  'MinUpload'=>10 * 1024 * 1024 * 1024,  'MinRatio'=>0.7,  'MinUploads'=>0,  'MaxTime'=>time_minus(3600 * 24 * 7));
 	$Criteria[] = array('From'=>MEMBER, 'To'=>POWER, 'MinUpload'=>25 * 1024 * 1024 * 1024,  'MinRatio'=>1.05, 'MinUploads'=>5,  'MaxTime'=>time_minus(3600 * 24 * 7 * 2));
-	$Criteria[] = array('From'=>POWER, 'To'=>ELITE,  'MinUpload'=>100 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>50, 'MaxTime'=>time_minus(3600 * 24 * 7 * 4));
-	$Criteria[] = array('From'=>ELITE, 'To'=>TORRENT_MASTER, 'MinUpload'=>500 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>500, 'MaxTime'=>time_minus(3600 * 24 * 7 * 8));
+	$Criteria[] = array('From'=>POWER, 'To'=>SUPER,  'MinUpload'=>100 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>50, 'MaxTime'=>time_minus(3600 * 24 * 7 * 4));
+	$Criteria[] = array('From'=>SUPER, 'To'=>ELITE,  'MinUpload'=>100 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>50, 'MaxTime'=>time_minus(3600 * 24 * 7 * 4));
+	$Criteria[] = array('From'=>ELITE, 'To'=>GURU, 'MinUpload'=>500 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>500, 'MaxTime'=>time_minus(3600 * 24 * 7 * 8));
+	$Criteria[] = array('From'=>GURU, 'To'=>MASTER, 'MinUpload'=>500 * 1024 * 1024 * 1024, 'MinRatio'=>1.05, 'MinUploads'=>500, 'MaxTime'=>time_minus(3600 * 24 * 7 * 8));
+        /* Keeping it for further reference
 	$Criteria[] = array(
 		'From'=>TORRENT_MASTER,
 		'To'=>POWER_TM,
@@ -236,27 +239,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 						FROM torrents
 						WHERE UserID=users_main.ID
 					) >= 500');
-	$Criteria[] = array(
-		'From'=>POWER_TM,
-		'To'=>ELITE_TM,
-		'MinUpload'=>500 * 1024 * 1024 * 1024,
-		'MinRatio'=>1.05,
-		'MinUploads'=>500,
-		'MaxTime'=>time_minus(3600 * 24 * 7 * 8),
-		'Extra'=>"(		SELECT COUNT(ID)
-						FROM torrents
-						WHERE ((LogScore = 100 AND Format = 'FLAC')
-							OR (Media = 'Vinyl' AND Format = 'FLAC')
-							OR (Media = 'WEB' AND Format = 'FLAC')
-							OR (Media = 'DVD' AND Format = 'FLAC')
-							OR (Media = 'Soundboard' AND Format = 'FLAC')
-							OR (Media = 'Cassette' AND Format = 'FLAC')
-							OR (Media = 'SACD' AND Format = 'FLAC')
-							OR (Media = 'Blu-ray' AND Format = 'FLAC')
-							OR (Media = 'DAT' AND Format = 'FLAC')
-							)
-							AND UserID = users_main.ID
-					) >= 500");
+         */
 
 	 foreach ($Criteria as $L) { // $L = Level
 		$Query = "
@@ -355,7 +338,7 @@ if ($Hour != next_hour() || $_GET['runhour'] || isset($argv[2])) {
 		list($UserID) = $UserID;
 		$DB->query("SELECT Invites, PermissionID FROM users_main WHERE ID=$UserID");
 		list($Invites, $PermID) = $DB->next_record();
-		if (($Invites < 2 && $Classes[$PermID]['Level'] <= $Classes[POWER]['Level']) || ($Invites < 4 && $PermID == ELITE)) {
+		if (($Invites < 2 && $Classes[$PermID]['Level'] <= $Classes[GURU]['Level']) || ($Invites < 4 && $PermID == MASTER)) {
 			$DB->query("UPDATE users_main SET Invites=Invites+1 WHERE ID=$UserID");
 			$Cache->begin_transaction('user_info_heavy_'.$UserID);
 			$Cache->update_row(false, array('Invites' => '+1'));
@@ -751,7 +734,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 		SELECT um.Username, um.Email
 		FROM users_info AS ui
 			JOIN users_main AS um ON um.ID=ui.UserID
-			LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".CELEB."'
+			LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".VIP."'
 		WHERE um.PermissionID IN ('".USER."', '".MEMBER	."')
 			AND um.LastAccess<'".time_minus(3600 * 24 * 110, true)."'
 			AND um.LastAccess>'".time_minus(3600 * 24 * 111, true)."'
@@ -768,7 +751,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 		SELECT um.ID
 		FROM users_info AS ui
 			JOIN users_main AS um ON um.ID=ui.UserID
-			LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".CELEB."'
+			LEFT JOIN users_levels AS ul ON ul.UserID = um.ID AND ul.PermissionID = '".VIP."'
 		WHERE um.PermissionID IN ('".USER."', '".MEMBER	."')
 			AND um.LastAccess<'".time_minus(3600 * 24 * 30 * 4)."'
 			AND um.LastAccess!='0000-00-00 00:00:00'
@@ -803,7 +786,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 	$DB->query('
 		SELECT um.ID
 		FROM users_main AS um
-		WHERE PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
+		WHERE PermissionID IN('.POWER.', '.SUPER.', '.ELITE.', '.GURU.', '.MASTER.')
 			AND Uploaded/Downloaded < 0.95
 			OR PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
 			AND Uploaded < 25*1024*1024*1024');
@@ -818,16 +801,16 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 	$DB->query('
 		UPDATE users_main
 		SET PermissionID='.MEMBER.'
-		WHERE PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
+		WHERE PermissionID IN('.POWER.', '.SUPER.', '.ELITE.', '.GURU.', '.MASTER.')
 			AND Uploaded/Downloaded < 0.95
-			OR PermissionID IN('.POWER.', '.ELITE.', '.TORRENT_MASTER.')
+			OR PermissionID IN('.POWER.', '.SUPER.', '.ELITE.', '.GURU.', '.MASTER.')
 			AND Uploaded < 25*1024*1024*1024');
 	echo "demoted 2\n";
 
 	$DB->query('
 		SELECT um.ID
 		FROM users_main AS um
-		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.ELITE.', '.TORRENT_MASTER.')
+		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.SUPER.', '.ELITE.', '.GURU.', '.MASTER.')
 			AND Uploaded/Downloaded < 0.65');
 	echo "demoted 3\n";
 	while (list($UserID) = $DB->next_record()) {
@@ -838,7 +821,7 @@ if (!$NoDaily && $Day != next_day() || $_GET['runday']) {
 	$DB->query('
 		UPDATE users_main
 		SET PermissionID='.USER.'
-		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.ELITE.', '.TORRENT_MASTER.')
+		WHERE PermissionID IN('.MEMBER.', '.POWER.', '.SUPER.', '.ELITE.', '.GURU.', '.MASTER.')
 			AND Uploaded/Downloaded < 0.65');
 	echo "demoted 4\n";
 
@@ -1268,11 +1251,8 @@ if ($BiWeek != next_biweek() || $_GET['runbiweek']) {
 			JOIN users_info AS ui on ui.UserID=um.ID
 		WHERE um.Enabled='1'
 			AND ui.DisableInvites = '0'
-			AND ((um.PermissionID = ".POWER."
-					AND um.Invites < 2
-				 ) OR (um.PermissionID = ".ELITE."
-					AND um.Invites < 4)
-				)");
+			AND (um.PermissionID = ".MASTER."
+			     AND um.Invites < 4)");
 	$UserIDs = $DB->collect('ID');
 	if (count($UserIDs) > 0) {
 		foreach ($UserIDs as $UserID) {
@@ -1310,11 +1290,8 @@ if ($BiWeek != next_biweek() || $_GET['runbiweek']) {
 			WHERE u.Upload>$Upload AND u.Upload/u.Download>$Ratio
 				AND um.Enabled = '1'
 				AND ui.DisableInvites = '0'
-				AND ((um.PermissionID = ".POWER."
-						AND um.Invites < 2
-					 ) OR (um.PermissionID = ".ELITE."
-						AND um.Invites < 4)
-					)");
+				AND (um.PermissionID = ".MASTER."
+						AND um.Invites < 4)");
 		$UserIDs = $DB->collect('ID');
 		if (count($UserIDs) > 0) {
 			foreach ($UserIDs as $UserID) {
