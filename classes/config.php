@@ -131,8 +131,8 @@ define('STATUS_CHAN', '#');
 $ForumsRevealVoters = array();
 $ForumsDoublePost = array();
 
-$Categories = array('Music', 'Applications', 'E-Books', 'Audiobooks', 'E-Learning Videos', 'Comedy', 'Comics');
-$CategoryIcons = array('music.png', 'apps.png', 'ebook.png', 'audiobook.png', 'elearning.png', 'comedy.png', 'comics.png');
+$Categories = array('Android','Arcade','Dreamcast','DS','3DS','E-Books','Emulators','Gamecube','Genesis','iPhone/iPad','JTAG|RGH','Mac','NES','N64','Saturn','SNES','Other','PC|Linux','PC|Windows','PS1','PS2','PS3','PSN','PSP','Wii','Wii VC','Xbox','Xbox 360');
+$CategoryIcons = array('android.png', 'arcade.png', 'dreamcast.png', 'ds.png', '3ds.png', 'ebooks.png', 'emulators.png', 'gamecube.png', 'genesis.png', 'iphone.png', 'jtag.png', 'mac.png', 'nes.png', 'n64.png', 'saturn.png', 'snes.png', 'other.png', 'linux.png', 'windows.png', 'ps1.png', 'ps2.png', 'ps3.png', 'psn.png', 'psp.png', 'wii.png', 'wiivc.png', 'xbox.png', 'xbox360.png');
 
 $Formats = array('MP3', 'FLAC', 'Ogg Vorbis', 'AAC', 'AC3', 'DTS');
 $Bitrates = array('192', 'APS (VBR)', 'V2 (VBR)', 'V1 (VBR)', '256', 'APX (VBR)', 'V0 (VBR)', 'q8.x (VBR)', '320', 'Lossless', '24bit Lossless', 'Other');
