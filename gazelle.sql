@@ -23,80 +23,80 @@ CREATE TABLE `api_users` (
   KEY `UserID` (`UserID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `artist_comments` (
+CREATE TABLE `game_comments` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `AuthorID` int(10) NOT NULL,
   `AddedTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Body` mediumtext COLLATE utf8_bin,
   `EditedUserID` int(10) DEFAULT NULL,
   `EditedTime` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
-  KEY `TopicID` (`ArtistID`),
+  KEY `TopicID` (`GameID`),
   KEY `AuthorID` (`AuthorID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_alias` (
+CREATE TABLE `games_alias` (
   `AliasID` int(10) NOT NULL AUTO_INCREMENT,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `Name` varchar(200) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
   `Redirect` int(10) NOT NULL DEFAULT '0',
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`AliasID`),
-  KEY `ArtistID` (`ArtistID`),
+  KEY `GameID` (`GameID`),
   KEY `Name` (`Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_group` (
-  `ArtistID` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `games_group` (
+  `GameID` int(10) NOT NULL AUTO_INCREMENT,
   `Name` varchar(200) CHARACTER SET utf8 COLLATE utf8_swedish_ci DEFAULT NULL,
   `RevisionID` int(12) DEFAULT NULL,
   `VanityHouse` tinyint(1) DEFAULT '0',
   `LastCommentID` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ArtistID`),
+  PRIMARY KEY (`GameID`),
   KEY `Name` (`Name`),
   KEY `RevisionID` (`RevisionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_last_read_comments` (
+CREATE TABLE `games_last_read_comments` (
   `UserID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `CommentID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`ArtistID`),
-  KEY `ArtistID` (`ArtistID`)
+  PRIMARY KEY (`UserID`,`GameID`),
+  KEY `GameID` (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_similar` (
-  `ArtistID` int(10) NOT NULL DEFAULT '0',
+CREATE TABLE `games_similar` (
+  `GameID` int(10) NOT NULL DEFAULT '0',
   `SimilarID` int(12) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ArtistID`,`SimilarID`),
-  KEY `ArtistID` (`ArtistID`),
+  PRIMARY KEY (`GameID`,`SimilarID`),
+  KEY `GameID` (`GameID`),
   KEY `SimilarID` (`SimilarID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_similar_scores` (
+CREATE TABLE `games_similar_scores` (
   `SimilarID` int(12) NOT NULL AUTO_INCREMENT,
   `Score` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`SimilarID`),
   KEY `Score` (`Score`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_similar_votes` (
+CREATE TABLE `games_similar_votes` (
   `SimilarID` int(12) NOT NULL,
   `UserID` int(10) NOT NULL,
   `Way` enum('up','down') COLLATE utf8_bin NOT NULL DEFAULT 'up',
   PRIMARY KEY (`SimilarID`,`UserID`,`Way`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `artists_tags` (
+CREATE TABLE `games_tags` (
   `TagID` int(10) NOT NULL DEFAULT '0',
-  `ArtistID` int(10) NOT NULL DEFAULT '0',
+  `GameID` int(10) NOT NULL DEFAULT '0',
   `PositiveVotes` int(6) NOT NULL DEFAULT '1',
   `NegativeVotes` int(6) NOT NULL DEFAULT '1',
   `UserID` int(10) DEFAULT NULL,
-  PRIMARY KEY (`TagID`,`ArtistID`),
+  PRIMARY KEY (`TagID`,`GameID`),
   KEY `TagID` (`TagID`),
-  KEY `ArtistID` (`ArtistID`),
+  KEY `GameID` (`GameID`),
   KEY `PositiveVotes` (`PositiveVotes`),
   KEY `NegativeVotes` (`NegativeVotes`),
   KEY `UserID` (`UserID`)
@@ -120,12 +120,12 @@ CREATE TABLE `blog` (
   KEY `Time` (`Time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `bookmarks_artists` (
+CREATE TABLE `bookmarks_games` (
   `UserID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `Time` datetime NOT NULL,
   KEY `UserID` (`UserID`),
-  KEY `ArtistID` (`ArtistID`)
+  KEY `GameID` (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `bookmarks_collages` (
@@ -183,13 +183,13 @@ CREATE TABLE `collages` (
   KEY `CategoryID` (`CategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `collages_artists` (
+CREATE TABLE `collages_games` (
   `CollageID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `UserID` int(10) NOT NULL,
   `Sort` int(10) NOT NULL DEFAULT '0',
   `AddedOn` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`CollageID`,`ArtistID`),
+  PRIMARY KEY (`CollageID`,`GameID`),
   KEY `UserID` (`UserID`),
   KEY `Sort` (`Sort`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -304,7 +304,7 @@ CREATE TABLE `featured_merch` (
   `Image` varchar(255) NOT NULL DEFAULT '',
   `Started` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `Ended` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `ArtistID` int(10) unsigned DEFAULT '0'
+  `GameID` int(10) unsigned DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `forums` (
@@ -681,9 +681,9 @@ CREATE TABLE `requests` (
   KEY `GroupID` (`GroupID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-CREATE TABLE `requests_artists` (
+CREATE TABLE `requests_games` (
   `RequestID` int(10) unsigned NOT NULL,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
   `Importance` enum('1','2','3','4','5','6','7') COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`RequestID`,`AliasID`)
@@ -734,7 +734,7 @@ CREATE TABLE `sphinx_delta` (
   `ID` int(10) NOT NULL,
   `GroupID` int(11) NOT NULL DEFAULT '0',
   `GroupName` varchar(255) DEFAULT NULL,
-  `ArtistName` varchar(2048) DEFAULT NULL,
+  `GameName` varchar(2048) DEFAULT NULL,
   `TagList` varchar(728) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
   `CatalogueNumber` varchar(50) DEFAULT NULL,
@@ -768,7 +768,7 @@ CREATE TABLE `sphinx_delta` (
 CREATE TABLE `sphinx_hash` (
   `ID` int(10) NOT NULL,
   `GroupName` varchar(255) DEFAULT NULL,
-  `ArtistName` varchar(2048) DEFAULT NULL,
+  `GameName` varchar(2048) DEFAULT NULL,
   `TagList` varchar(728) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
   `CatalogueNumber` varchar(50) DEFAULT NULL,
@@ -811,7 +811,7 @@ CREATE TABLE `sphinx_requests` (
   `CategoryID` int(3) NOT NULL,
   `Title` varchar(255) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
-  `ArtistList` varchar(2048) DEFAULT NULL,
+  `GameList` varchar(2048) DEFAULT NULL,
   `ReleaseType` tinyint(2) DEFAULT NULL,
   `CatalogueNumber` varchar(50) NOT NULL,
   `BitrateList` varchar(255) DEFAULT NULL,
@@ -844,7 +844,7 @@ CREATE TABLE `sphinx_requests_delta` (
   `CategoryID` int(3) NOT NULL,
   `Title` varchar(255) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
-  `ArtistList` varchar(2048) DEFAULT NULL,
+  `GameList` varchar(2048) DEFAULT NULL,
   `ReleaseType` tinyint(2) DEFAULT NULL,
   `CatalogueNumber` varchar(50) NOT NULL,
   `BitrateList` varchar(255) DEFAULT NULL,
@@ -1096,14 +1096,14 @@ CREATE TABLE `torrents` (
   KEY `FreeTorrent` (`FreeTorrent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `torrents_artists` (
+CREATE TABLE `torrents_games` (
   `GroupID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
+  `GameID` int(10) NOT NULL,
   `AliasID` int(10) NOT NULL,
   `UserID` int(10) unsigned NOT NULL DEFAULT '0',
   `Importance` enum('1','2','3','4','5','6','7') COLLATE utf8_bin NOT NULL DEFAULT '1',
-  PRIMARY KEY (`GroupID`,`ArtistID`,`Importance`),
-  KEY `ArtistID` (`ArtistID`),
+  PRIMARY KEY (`GroupID`,`GameID`,`Importance`),
+  KEY `GameID` (`GameID`),
   KEY `AliasID` (`AliasID`),
   KEY `Importance` (`Importance`),
   KEY `GroupID` (`GroupID`),
@@ -1171,8 +1171,8 @@ CREATE TABLE `torrents_files` (
 
 CREATE TABLE `torrents_group` (
   `ID` int(10) NOT NULL AUTO_INCREMENT,
-  `ArtistID` int(10) DEFAULT NULL,
-  `NumArtists` int(3) NOT NULL DEFAULT '0',
+  `GameID` int(10) DEFAULT NULL,
+  `NumGames` int(3) NOT NULL DEFAULT '0',
   `CategoryID` int(3) DEFAULT NULL,
   `Name` varchar(300) COLLATE utf8_bin DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
@@ -1188,7 +1188,7 @@ CREATE TABLE `torrents_group` (
   `VanityHouse` tinyint(1) DEFAULT '0',
   `LastCommentID` int(10) NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
-  KEY `ArtistID` (`ArtistID`),
+  KEY `GameID` (`GameID`),
   KEY `CategoryID` (`CategoryID`),
   KEY `Name` (`Name`(255)),
   KEY `Year` (`Year`),
@@ -1295,11 +1295,11 @@ CREATE TABLE `torrents_votes` (
   CONSTRAINT `torrents_votes_ibfk_1` FOREIGN KEY (`GroupID`) REFERENCES `torrents_group` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `users_artists_comments_subscriptions` (
+CREATE TABLE `users_games_comments_subscriptions` (
   `UserID` int(10) NOT NULL,
-  `ArtistID` int(10) NOT NULL,
-  PRIMARY KEY (`UserID`,`ArtistID`),
-  KEY `ArtistID` (`ArtistID`)
+  `GameID` int(10) NOT NULL,
+  PRIMARY KEY (`UserID`,`GameID`),
+  KEY `GameID` (`GameID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE `users_collage_subs` (
@@ -1312,7 +1312,7 @@ CREATE TABLE `users_collage_subs` (
 
 CREATE TABLE `users_comments_last_read` (
   `UserID` int(10) NOT NULL,
-  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('game','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
   `PageID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`Page`,`PageID`),
@@ -1413,7 +1413,7 @@ CREATE TABLE `users_info` (
   `SiteOptions` text NOT NULL,
   `ViewAvatars` enum('0','1') NOT NULL DEFAULT '1',
   `Donor` enum('0','1') NOT NULL DEFAULT '0',
-  `Artist` enum('0','1') NOT NULL DEFAULT '0',
+  `Game` enum('0','1') NOT NULL DEFAULT '0',
   `DownloadAlt` enum('0','1') NOT NULL DEFAULT '0',
   `Warned` datetime NOT NULL,
   `MessagesPerPage` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -1453,7 +1453,7 @@ CREATE TABLE `users_info` (
   `UnseededAlerts` enum('0','1') NOT NULL DEFAULT '0',
   `LastReadBlog` int(10) NOT NULL DEFAULT '0',
   `TorrentsCommentsCatchupTime` datetime DEFAULT NULL,
-  `ArtistsCommentsCatchupTime` datetime DEFAULT NULL,
+  `GamesCommentsCatchupTime` datetime DEFAULT NULL,
   UNIQUE KEY `UserID` (`UserID`),
   KEY `SupportFor` (`SupportFor`),
   KEY `DisableInvites` (`DisableInvites`),
@@ -1535,7 +1535,7 @@ CREATE TABLE `users_notify_filters` (
   `ID` int(12) NOT NULL AUTO_INCREMENT,
   `UserID` int(10) NOT NULL,
   `Label` varchar(128) NOT NULL DEFAULT '',
-  `Artists` mediumtext NOT NULL,
+  `Games` mediumtext NOT NULL,
   `RecordLabels` mediumtext NOT NULL,
   `Users` mediumtext NOT NULL,
   `Tags` varchar(500) NOT NULL DEFAULT '',
@@ -1558,7 +1558,7 @@ CREATE TABLE `users_notify_filters` (
 CREATE TABLE `users_notify_quoted` (
   `UserID` int(10) NOT NULL,
   `QuoterID` int(10) NOT NULL,
-  `Page` enum('forums','artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('forums','game','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
   `PageID` int(10) NOT NULL,
   `PostID` int(10) NOT NULL,
   `UnRead` tinyint(1) NOT NULL DEFAULT '1',
@@ -1627,7 +1627,7 @@ CREATE TABLE `users_subscriptions` (
 
 CREATE TABLE `users_subscriptions_comments` (
   `UserID` int(10) NOT NULL,
-  `Page` enum('artist','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
+  `Page` enum('game','collages','requests','torrents') COLLATE utf8_swedish_ci NOT NULL,
   `PageID` int(10) NOT NULL,
   PRIMARY KEY (`UserID`,`Page`,`PageID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
@@ -1699,7 +1699,7 @@ CREATE TABLE `wiki_articles` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_swedish_ci;
 
-CREATE TABLE `wiki_artists` (
+CREATE TABLE `wiki_games` (
   `RevisionID` int(12) NOT NULL AUTO_INCREMENT,
   `PageID` int(10) NOT NULL DEFAULT '0',
   `Body` text COLLATE utf8_bin,
@@ -1787,7 +1787,7 @@ RETURN IF(n = 0,0.0,((p + 1.35336) / n - 1.6452 * SQRT((p * (n-p)) / n + 0.67668
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-INSERT INTO permissions (ID, Level, Name, `Values`, DisplayStaff) VALUES (15, 1000, 'Sysop', 'a:100:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:21:\"site_see_old_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:19:\"site_advanced_top10\";i:1;s:16:\"site_album_votes\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:20:\"site_collages_delete\";i:1;s:23:\"site_collages_subscribe\";i:1;s:22:\"site_collages_personal\";i:1;s:28:\"site_collages_renamepersonal\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:22:\"site_can_invite_always\";i:1;s:27:\"site_send_unlimited_invites\";i:1;s:22:\"site_moderate_requests\";i:1;s:18:\"site_delete_artist\";i:1;s:20:\"site_moderate_forums\";i:1;s:17:\"site_admin_forums\";i:1;s:23:\"site_forums_double_post\";i:1;s:14:\"site_view_flow\";i:1;s:18:\"site_view_full_log\";i:1;s:28:\"site_view_torrent_snatchlist\";i:1;s:18:\"site_recommend_own\";i:1;s:27:\"site_manage_recommendations\";i:1;s:15:\"site_delete_tag\";i:1;s:23:\"site_disable_ip_history\";i:1;s:14:\"zip_downloader\";i:1;s:10:\"site_debug\";i:1;s:17:\"site_proxy_images\";i:1;s:16:\"site_search_many\";i:1;s:20:\"users_edit_usernames\";i:1;s:16:\"users_edit_ratio\";i:1;s:20:\"users_edit_own_ratio\";i:1;s:17:\"users_edit_titles\";i:1;s:18:\"users_edit_avatars\";i:1;s:18:\"users_edit_invites\";i:1;s:22:\"users_edit_watch_hours\";i:1;s:21:\"users_edit_reset_keys\";i:1;s:19:\"users_edit_profiles\";i:1;s:18:\"users_view_friends\";i:1;s:20:\"users_reset_own_keys\";i:1;s:19:\"users_edit_password\";i:1;s:19:\"users_promote_below\";i:1;s:16:\"users_promote_to\";i:1;s:16:\"users_give_donor\";i:1;s:10:\"users_warn\";i:1;s:19:\"users_disable_users\";i:1;s:19:\"users_disable_posts\";i:1;s:17:\"users_disable_any\";i:1;s:18:\"users_delete_users\";i:1;s:18:\"users_view_invites\";i:1;s:20:\"users_view_seedleech\";i:1;s:19:\"users_view_uploaded\";i:1;s:15:\"users_view_keys\";i:1;s:14:\"users_view_ips\";i:1;s:16:\"users_view_email\";i:1;s:23:\"users_override_paranoia\";i:1;s:12:\"users_logout\";i:1;s:20:\"users_make_invisible\";i:1;s:9:\"users_mod\";i:1;s:13:\"torrents_edit\";i:1;s:15:\"torrents_delete\";i:1;s:20:\"torrents_delete_fast\";i:1;s:18:\"torrents_freeleech\";i:1;s:20:\"torrents_search_fast\";i:1;s:17:\"torrents_hide_dnu\";i:1;s:19:\"torrents_fix_ghosts\";i:1;s:17:\"admin_manage_news\";i:1;s:17:\"admin_manage_blog\";i:1;s:18:\"admin_manage_polls\";i:1;s:19:\"admin_manage_forums\";i:1;s:16:\"admin_manage_fls\";i:1;s:13:\"admin_reports\";i:1;s:26:\"admin_advanced_user_search\";i:1;s:18:\"admin_create_users\";i:1;s:15:\"admin_donor_log\";i:1;s:19:\"admin_manage_ipbans\";i:1;s:9:\"admin_dnu\";i:1;s:17:\"admin_clear_cache\";i:1;s:15:\"admin_whitelist\";i:1;s:24:\"admin_manage_permissions\";i:1;s:14:\"admin_schedule\";i:1;s:17:\"admin_login_watch\";i:1;s:17:\"admin_manage_wiki\";i:1;s:18:\"admin_update_geoip\";i:1;s:21:\"site_collages_recover\";i:1;s:19:\"torrents_add_artist\";i:1;s:13:\"edit_unknowns\";i:1;s:19:\"forums_polls_create\";i:1;s:21:\"forums_polls_moderate\";i:1;s:12:\"project_team\";i:1;s:25:\"torrents_edit_vanityhouse\";i:1;s:23:\"artist_edit_vanityhouse\";i:1;s:21:\"site_tag_aliases_read\";i:1;}', '1'), (2, 100, 'User', 'a:7:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_artist\";i:1;}', '0'), (3, 150, 'Member', 'a:10:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_artist\";i:1;}', '0'), (4, 200, 'Power User', 'a:14:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:19:\"torrents_add_artist\";i:1;} ', '0'), (5, 250, 'Elite', 'a:18:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_advanced_top10\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:15:\"site_delete_tag\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:13:\"torrents_edit\";i:1;s:19:\"torrents_add_artist\";i:1;s:17:\"admin_clear_cache\";i:1;}', '0'), (20, 202, 'Donor', 'a:9:{s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;}', '0'), (19, 201, 'Artist', 'a:9:{s:10:\"site_leech\";s:1:\"1\";s:11:\"site_upload\";s:1:\"1\";s:9:\"site_vote\";s:1:\"1\";s:20:\"site_submit_requests\";s:1:\"1\";s:20:\"site_advanced_search\";s:1:\"1\";s:10:\"site_top10\";s:1:\"1\";s:19:\"site_make_bookmarks\";s:1:\"1\";s:14:\"site_edit_wiki\";s:1:\"1\";s:18:\"site_recommend_own\";s:1:\"1\";}', '0');
+INSERT INTO permissions (ID, Level, Name, `Values`, DisplayStaff) VALUES (15, 1000, 'Sysop', 'a:100:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:21:\"site_see_old_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:19:\"site_advanced_top10\";i:1;s:16:\"site_album_votes\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:20:\"site_collages_delete\";i:1;s:23:\"site_collages_subscribe\";i:1;s:22:\"site_collages_personal\";i:1;s:28:\"site_collages_renamepersonal\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:22:\"site_can_invite_always\";i:1;s:27:\"site_send_unlimited_invites\";i:1;s:22:\"site_moderate_requests\";i:1;s:18:\"site_delete_game\";i:1;s:20:\"site_moderate_forums\";i:1;s:17:\"site_admin_forums\";i:1;s:23:\"site_forums_double_post\";i:1;s:14:\"site_view_flow\";i:1;s:18:\"site_view_full_log\";i:1;s:28:\"site_view_torrent_snatchlist\";i:1;s:18:\"site_recommend_own\";i:1;s:27:\"site_manage_recommendations\";i:1;s:15:\"site_delete_tag\";i:1;s:23:\"site_disable_ip_history\";i:1;s:14:\"zip_downloader\";i:1;s:10:\"site_debug\";i:1;s:17:\"site_proxy_images\";i:1;s:16:\"site_search_many\";i:1;s:20:\"users_edit_usernames\";i:1;s:16:\"users_edit_ratio\";i:1;s:20:\"users_edit_own_ratio\";i:1;s:17:\"users_edit_titles\";i:1;s:18:\"users_edit_avatars\";i:1;s:18:\"users_edit_invites\";i:1;s:22:\"users_edit_watch_hours\";i:1;s:21:\"users_edit_reset_keys\";i:1;s:19:\"users_edit_profiles\";i:1;s:18:\"users_view_friends\";i:1;s:20:\"users_reset_own_keys\";i:1;s:19:\"users_edit_password\";i:1;s:19:\"users_promote_below\";i:1;s:16:\"users_promote_to\";i:1;s:16:\"users_give_donor\";i:1;s:10:\"users_warn\";i:1;s:19:\"users_disable_users\";i:1;s:19:\"users_disable_posts\";i:1;s:17:\"users_disable_any\";i:1;s:18:\"users_delete_users\";i:1;s:18:\"users_view_invites\";i:1;s:20:\"users_view_seedleech\";i:1;s:19:\"users_view_uploaded\";i:1;s:15:\"users_view_keys\";i:1;s:14:\"users_view_ips\";i:1;s:16:\"users_view_email\";i:1;s:23:\"users_override_paranoia\";i:1;s:12:\"users_logout\";i:1;s:20:\"users_make_invisible\";i:1;s:9:\"users_mod\";i:1;s:13:\"torrents_edit\";i:1;s:15:\"torrents_delete\";i:1;s:20:\"torrents_delete_fast\";i:1;s:18:\"torrents_freeleech\";i:1;s:20:\"torrents_search_fast\";i:1;s:17:\"torrents_hide_dnu\";i:1;s:19:\"torrents_fix_ghosts\";i:1;s:17:\"admin_manage_news\";i:1;s:17:\"admin_manage_blog\";i:1;s:18:\"admin_manage_polls\";i:1;s:19:\"admin_manage_forums\";i:1;s:16:\"admin_manage_fls\";i:1;s:13:\"admin_reports\";i:1;s:26:\"admin_advanced_user_search\";i:1;s:18:\"admin_create_users\";i:1;s:15:\"admin_donor_log\";i:1;s:19:\"admin_manage_ipbans\";i:1;s:9:\"admin_dnu\";i:1;s:17:\"admin_clear_cache\";i:1;s:15:\"admin_whitelist\";i:1;s:24:\"admin_manage_permissions\";i:1;s:14:\"admin_schedule\";i:1;s:17:\"admin_login_watch\";i:1;s:17:\"admin_manage_wiki\";i:1;s:18:\"admin_update_geoip\";i:1;s:21:\"site_collages_recover\";i:1;s:19:\"torrents_add_game\";i:1;s:13:\"edit_unknowns\";i:1;s:19:\"forums_polls_create\";i:1;s:21:\"forums_polls_moderate\";i:1;s:12:\"project_team\";i:1;s:25:\"torrents_edit_vanityhouse\";i:1;s:23:\"game_edit_vanityhouse\";i:1;s:21:\"site_tag_aliases_read\";i:1;}', '1'), (2, 100, 'User', 'a:7:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_game\";i:1;}', '0'), (3, 150, 'Member', 'a:10:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:19:\"torrents_add_game\";i:1;}', '0'), (4, 200, 'Power User', 'a:14:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:19:\"torrents_add_game\";i:1;} ', '0'), (5, 250, 'Elite', 'a:18:{s:10:\"site_leech\";i:1;s:11:\"site_upload\";i:1;s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:19:\"site_advanced_top10\";i:1;s:19:\"site_make_bookmarks\";i:1;s:14:\"site_edit_wiki\";i:1;s:15:\"site_delete_tag\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;s:13:\"torrents_edit\";i:1;s:19:\"torrents_add_game\";i:1;s:17:\"admin_clear_cache\";i:1;}', '0'), (20, 202, 'Donor', 'a:9:{s:9:\"site_vote\";i:1;s:20:\"site_submit_requests\";i:1;s:20:\"site_advanced_search\";i:1;s:10:\"site_top10\";i:1;s:20:\"site_torrents_notify\";i:1;s:20:\"site_collages_create\";i:1;s:20:\"site_collages_manage\";i:1;s:14:\"zip_downloader\";i:1;s:19:\"forums_polls_create\";i:1;}', '0'), (19, 201, 'Game', 'a:9:{s:10:\"site_leech\";s:1:\"1\";s:11:\"site_upload\";s:1:\"1\";s:9:\"site_vote\";s:1:\"1\";s:20:\"site_submit_requests\";s:1:\"1\";s:20:\"site_advanced_search\";s:1:\"1\";s:10:\"site_top10\";s:1:\"1\";s:19:\"site_make_bookmarks\";s:1:\"1\";s:14:\"site_edit_wiki\";s:1:\"1\";s:18:\"site_recommend_own\";s:1:\"1\";}', '0');
 
 INSERT INTO stylesheets (ID, Name, Description, `Default`) VALUES (9, 'Proton', 'Proton by Protiek', '0'), (2, 'Layer cake', 'Grey stylesheet by Emm', '0'), (21, 'postmod', 'Upgrade on anorex', '1');
 
