@@ -33,9 +33,6 @@ if (empty($_POST['confirm'])) {
 	list($Name) = $DB->next_record();
 	$DB->query("SELECT CategoryID, Name FROM torrents_group WHERE ID = ".$GroupID);
 	list($CategoryID, $NewName) = $DB->next_record();
-	if ($Categories[$CategoryID-1] != 'Music') {
-		error('Target must be a music group.');
-	}
 
 	$Artists = Artists::get_artists(array($OldGroupID, $GroupID));
 
